@@ -1,10 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './TicketDisplay.css'
 
+const COLOR_SEQUENCE = ['red', 'blue', 'green', 'yellow']
+const COLOR_TO_HEX = {
+  red: '#e53935',
+  blue: '#1e88e5',
+  green: '#43a047',
+  yellow: '#f4b400'
+}
+
 function TicketDisplay({ ticket }) {
   const [displayedNumber, setDisplayedNumber] = useState(null)
   const [displayedVariant, setDisplayedVariant] = useState(null)
   const [isCycling, setIsCycling] = useState(false)
+  const [cyclingColor, setCyclingColor] = useState(null)
   const intervalRef = useRef(null)
   const timeoutRef = useRef(null)
   const variantCycleRef = useRef('A')
@@ -26,6 +35,7 @@ function TicketDisplay({ ticket }) {
     setDisplayedNumber(finalNumber)
     setDisplayedVariant(finalVariant)
     setIsCycling(false)
+    // cyclingColor will fade out via CSS opacity when isCycling becomes false
   }
 
   useEffect(() => {
@@ -38,25 +48,43 @@ function TicketDisplay({ ticket }) {
   useEffect(() => {
     if (!ticketKey) {
       stopCycling(null, null)
+      setCyclingColor(null)
       return
     }
 
     setIsCycling(true)
     variantCycleRef.current = 'A'
 
-    intervalRef.current = setInterval(() => {
+    // Number + variant fast cycling
+    const numberInterval = setInterval(() => {
       const randomNumber = Math.floor(Math.random() * 100) + 1
       variantCycleRef.current = variantCycleRef.current === 'A' ? 'B' : 'A'
       setDisplayedNumber(randomNumber)
       setDisplayedVariant(variantCycleRef.current)
     }, 70)
+    intervalRef.current = numberInterval
+
+    // Color smooth cycling: 4 colors over ~2s => ~500ms per color
+    const colors = COLOR_SEQUENCE
+    let colorIndex = 0
+    setCyclingColor(colors[colorIndex])
+    const colorInterval = setInterval(() => {
+      colorIndex = (colorIndex + 1) % colors.length
+      setCyclingColor(colors[colorIndex])
+    }, 500)
 
     timeoutRef.current = setTimeout(() => {
+      // stop both intervals
+      clearInterval(numberInterval)
+      clearInterval(colorInterval)
+      intervalRef.current = null
       stopCycling(ticket.number, ticket.variant)
+      // After stopping, overlay fades out to reveal final color
     }, 2000)
 
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
+      clearInterval(numberInterval)
+      clearInterval(colorInterval)
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
     }
   }, [ticketKey, ticket?.number, ticket?.variant])
@@ -74,9 +102,16 @@ function TicketDisplay({ ticket }) {
 
   const finalNumber = displayedNumber ?? ticket.number
   const finalVariant = displayedVariant ?? ticket.variant
+  const displayClassName = `ticket-display color-${ticket.color}${isCycling ? ' cycling' : ''}`
 
   return (
-    <div className={`ticket-display color-${ticket.color}`}>
+    <div className={displayClassName}>
+      {/* Smooth color overlay that fades/changes during cycling */}
+      <div
+        className={`color-fader${isCycling ? ' visible' : ''}`}
+        style={{ backgroundColor: cyclingColor ? COLOR_TO_HEX[cyclingColor] : 'transparent' }}
+        aria-hidden
+      />
       <div className="ticket-content">
         <div className="ticket-number" aria-live="polite">
           {String(finalNumber).padStart(2, '0')}

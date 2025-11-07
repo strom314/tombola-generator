@@ -24,6 +24,19 @@
   pointer-events: none;
 }
 
+/* Smooth color overlay that fades during cycling */
+.color-fader {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 300ms ease, background-color 480ms ease;
+  mix-blend-mode: normal;
+}
+
+.color-fader.visible {
+  opacity: 1;
+}
+
 .ticket-display.color-red {
   background: linear-gradient(135deg, #ef5350 0%, #c62828 100%);
 }
