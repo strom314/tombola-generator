@@ -3,16 +3,18 @@ import './TicketDisplay.css'
 
 function TicketDisplay({ ticket }) {
   const [displayedNumber, setDisplayedNumber] = useState(null)
+  const [displayedVariant, setDisplayedVariant] = useState(null)
   const [isCycling, setIsCycling] = useState(false)
   const intervalRef = useRef(null)
   const timeoutRef = useRef(null)
+  const variantCycleRef = useRef('A')
 
   const ticketKey = useMemo(() => {
     if (!ticket) return null
     return `${ticket.color}-${ticket.variant}-${ticket.number}`
   }, [ticket])
 
-  const stopCycling = (finalNumber) => {
+  const stopCycling = (finalNumber, finalVariant) => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
       intervalRef.current = null
@@ -22,6 +24,7 @@ function TicketDisplay({ ticket }) {
       timeoutRef.current = null
     }
     setDisplayedNumber(finalNumber)
+    setDisplayedVariant(finalVariant)
     setIsCycling(false)
   }
 
@@ -34,26 +37,29 @@ function TicketDisplay({ ticket }) {
 
   useEffect(() => {
     if (!ticketKey) {
-      stopCycling(null)
+      stopCycling(null, null)
       return
     }
 
     setIsCycling(true)
+    variantCycleRef.current = 'A'
 
     intervalRef.current = setInterval(() => {
-      const random = Math.floor(Math.random() * 100) + 1
-      setDisplayedNumber(random)
+      const randomNumber = Math.floor(Math.random() * 100) + 1
+      variantCycleRef.current = variantCycleRef.current === 'A' ? 'B' : 'A'
+      setDisplayedNumber(randomNumber)
+      setDisplayedVariant(variantCycleRef.current)
     }, 70)
 
     timeoutRef.current = setTimeout(() => {
-      stopCycling(ticket.number)
+      stopCycling(ticket.number, ticket.variant)
     }, 2000)
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
     }
-  }, [ticketKey, ticket?.number])
+  }, [ticketKey, ticket?.number, ticket?.variant])
 
   if (!ticket) {
     return (
@@ -67,6 +73,7 @@ function TicketDisplay({ ticket }) {
   }
 
   const finalNumber = displayedNumber ?? ticket.number
+  const finalVariant = displayedVariant ?? ticket.variant
 
   return (
     <div className={`ticket-display color-${ticket.color}`}>
@@ -74,7 +81,7 @@ function TicketDisplay({ ticket }) {
         <div className="ticket-number" aria-live="polite">
           {String(finalNumber).padStart(2, '0')}
         </div>
-        <div className="ticket-variant">{ticket.variant}</div>
+        <div className="ticket-variant" aria-live="polite">{finalVariant}</div>
       </div>
     </div>
   )
