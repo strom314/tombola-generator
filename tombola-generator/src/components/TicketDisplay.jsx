@@ -64,14 +64,14 @@ function TicketDisplay({ ticket }) {
     }, 70)
     intervalRef.current = numberInterval
 
-    // Color smooth cycling: 4 colors over ~2s => ~500ms per color
+    // Color smooth cycling: alternate between 2 colors at a slower pace (~900ms)
     const colors = COLOR_SEQUENCE
     let colorIndex = 0
     setCyclingColor(colors[colorIndex])
     const colorInterval = setInterval(() => {
       colorIndex = (colorIndex + 1) % colors.length
       setCyclingColor(colors[colorIndex])
-    }, 500)
+    }, 900)
 
     timeoutRef.current = setTimeout(() => {
       // stop both intervals

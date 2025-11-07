@@ -29,7 +29,7 @@
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 300ms ease, background-color 480ms ease;
+  transition: opacity 500ms ease, background-color 900ms ease;
   mix-blend-mode: normal;
 }
 
@@ -105,4 +105,3 @@
     font-size: 2.5rem;
   }
 }
-
