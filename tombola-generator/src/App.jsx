@@ -4,7 +4,7 @@ import SideMenu from "./components/SideMenu";
 import TicketDisplay from "./components/TicketDisplay";
 import WinningList from "./components/WinningList";
 
-const COLORS = ["red", "blue", "green", "yellow"];
+const COLORS = ["red", "blue", "green", "yellow", "white"];
 const VARIANTS = ["A", "B"];
 
 function App() {
@@ -14,6 +14,7 @@ function App() {
     blue: { A: "", B: "" },
     green: { A: "", B: "" },
     yellow: { A: "", B: "" },
+    white: { A: "", B: "" },
   });
   const [wonTickets, setWonTickets] = useState([]);
   const [currentTicket, setCurrentTicket] = useState(null);

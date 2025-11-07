@@ -132,6 +132,12 @@
   color: #f57f17;
 }
 
+.color-title.color-white {
+  background: #f5f5f5;
+  color: #424242;
+  border: 2px solid #e0e0e0;
+}
+
 .range-input-group {
   margin-bottom: 15px;
 }
@@ -176,4 +182,3 @@
     max-width: 350px;
   }
 }
-
