@@ -3,6 +3,8 @@ import "./App.css";
 import SideMenu from "./components/SideMenu";
 import TicketDisplay from "./components/TicketDisplay";
 import WinningList from "./components/WinningList";
+import wheelSound from "./assets/wheel.mp3";
+import tadaSound from "./assets/tada.mp3";
 
 const COLORS = ["red", "blue", "green", "yellow", "white"];
 const VARIANTS = ["A", "B"];
@@ -83,6 +85,10 @@ function App() {
       return;
     }
 
+    // Play the wheel sound
+    const audio = new Audio(wheelSound);
+    audio.play();
+
     const randomIndex = Math.floor(Math.random() * availableTickets.length);
     const ticket = availableTickets[randomIndex];
 
@@ -91,6 +97,9 @@ function App() {
     // Delay adding to winning tickets until animation completes (2000ms + small buffer)
     setTimeout(() => {
       setWonTickets((prev) => [...prev, ticket]);
+      // Play tada sound when animation finishes
+      const tadaAudio = new Audio(tadaSound);
+      tadaAudio.play();
     }, 2100); // Animation duration is 2000ms, adding 100ms buffer
   };
 
