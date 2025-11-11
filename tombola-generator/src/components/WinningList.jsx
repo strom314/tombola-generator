@@ -12,7 +12,7 @@ function WinningList({ tickets }) {
 
   return (
     <div className="winning-list">
-      <h2>Winning Tickets ({tickets.length})</h2>
+      <h2>Vylosované lístky ({tickets.length})</h2>
       <div className="tickets-grid">
         {tickets.slice().reverse().map((ticket, index) => (
           <div 

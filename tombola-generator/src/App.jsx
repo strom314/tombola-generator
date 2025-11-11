@@ -122,7 +122,7 @@ function App() {
       />
 
       <div className="main-content">
-        <h1>Tombola Ticket Generator</h1>
+        <h1>Losovanie lístkov</h1>
 
         <TicketDisplay ticket={currentTicket} />
 
@@ -132,11 +132,11 @@ function App() {
             onClick={handleGenerate}
             disabled={availableTickets.length === 0}
           >
-            Generate Ticket
+            Vylosovať lístok
           </button>
           {wonTickets.length > 0 && (
             <button className="clear-button" onClick={handleClearWinners}>
-              Clear Winners
+              Vymazať lístky
             </button>
           )}
         </div>
