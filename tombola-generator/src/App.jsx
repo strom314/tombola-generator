@@ -3,6 +3,7 @@ import "./App.css";
 import SideMenu from "./components/SideMenu";
 import TicketDisplay from "./components/TicketDisplay";
 import WinningList from "./components/WinningList";
+import Confetti from "./components/Confetti";
 import wheelSound from "./assets/wheel.mp3";
 import tadaSound from "./assets/tada.mp3";
 
@@ -20,6 +21,7 @@ function App() {
   });
   const [wonTickets, setWonTickets] = useState([]);
   const [currentTicket, setCurrentTicket] = useState(null);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   // Parse range string (e.g., "1-50, 60-80") into array of numbers
   const parseRanges = (rangeString) => {
@@ -97,9 +99,10 @@ function App() {
     // Delay adding to winning tickets until animation completes (2000ms + small buffer)
     setTimeout(() => {
       setWonTickets((prev) => [...prev, ticket]);
-      // Play tada sound when animation finishes
+      // Play tada sound and show confetti when animation finishes
       const tadaAudio = new Audio(tadaSound);
       tadaAudio.play();
+      setShowConfetti(true);
     }, 2100); // Animation duration is 2000ms, adding 100ms buffer
   };
 
@@ -112,6 +115,11 @@ function App() {
 
   return (
     <div className="app">
+      <Confetti
+        trigger={showConfetti}
+        onComplete={() => setShowConfetti(false)}
+      />
+
       <button
         className="hamburger-menu"
         onClick={() => setMenuOpen(!menuOpen)}
@@ -139,7 +147,7 @@ function App() {
           <button
             className="generate-button"
             onClick={handleGenerate}
-            disabled={availableTickets.length === 0}
+            disabled={availableTickets.length === 0 || showConfetti}
           >
             Vylosovať lístok
           </button>
