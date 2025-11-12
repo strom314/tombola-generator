@@ -33,10 +33,10 @@ const Confetti = ({ trigger = false, onComplete = () => {} }) => {
       this.p2 = p2;
       this.p3 = p3;
       this.time = 0;
-      this.duration = 3 + Math.random() * 2;
+      this.duration = 3 + Math.random() * 1;
       this.color = "#" + Math.floor(Math.random() * 0xffffff).toString(16);
-      this.w = 12;
-      this.h = 9;
+      this.w = 18;
+      this.h = 13.5;
       this.complete = false;
       this.x = p0.x;
       this.y = p0.y;
