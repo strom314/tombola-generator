@@ -147,8 +147,8 @@ function TicketDisplay({ ticket }) {
     return (
       <div className="ticket-display empty">
         <div className="ticket-content">
-          <p>No ticket generated yet</p>
-          <p className="subtitle">Click "Generate Ticket" to start</p>
+          <p>Nebol vylosovaný žiaden lístok</p>
+          <p className="subtitle">Stlačte tlačidlo pre losovanie lístka</p>
         </div>
       </div>
     );
